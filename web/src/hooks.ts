@@ -30,79 +30,164 @@ export function useWallet(runtime: Runtime | undefined) {
   const [options, setOptions] = useState<
     { name: string; provider: Provider }[]
   >([]);
-  const [selected, setSelected] = useState(0);
+  const [provider, setProvider] = useState<Provider>();
   const [account, setAccount] = useState<Address>();
   const [chainId, setChainId] = useState<number>();
-  const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(""),
+    [busy, setBusy] = useState(false),
+    [open, setOpen] = useState(false);
+  const [uri, setUri] = useState(""),
+    [qr, setQr] = useState("");
+  const wc = useRef<import("../addons/wallet").UniversalProvider | undefined>(
+    undefined,
+  );
+  const attempt = useRef(0);
   useEffect(() => {
     const announce = (e: Event) => {
       const d = (
         e as CustomEvent<{ info: { name: string }; provider: Provider }>
       ).detail;
       if (d?.provider)
-        setOptions((prev) =>
-          prev.some((p) => p.provider === d.provider)
-            ? prev
-            : [...prev, { name: d.info.name, provider: d.provider }],
+        setOptions((p) =>
+          p.some((o) => o.provider === d.provider)
+            ? p
+            : [...p, { name: d.info.name, provider: d.provider }],
         );
     };
     window.addEventListener("eip6963:announceProvider", announce);
     window.dispatchEvent(new Event("eip6963:requestProvider"));
     if (window.ethereum)
-      setOptions((prev) =>
-        prev.length
-          ? prev
-          : (window.ethereum?.providers || [window.ethereum!]).map((p, i) => ({
-              name: `Browser wallet${i ? ` ${i + 1}` : ""}`,
-              provider: p,
-            })),
+      setOptions((p) =>
+        p.length
+          ? p
+          : (window.ethereum?.providers || [window.ethereum!]).map(
+              (provider, i) => ({
+                name: (
+                  provider as Provider & {
+                    isRabby?: boolean;
+                    isMetaMask?: boolean;
+                  }
+                ).isRabby
+                  ? "Rabby"
+                  : (provider as Provider & { isMetaMask?: boolean }).isMetaMask
+                    ? "MetaMask"
+                    : `Browser wallet${i ? " " + (i + 1) : ""}`,
+                provider,
+              }),
+            ),
       );
     return () =>
       window.removeEventListener("eip6963:announceProvider", announce);
   }, []);
-  const provider = options[selected]?.provider;
   useEffect(() => {
-    setAccount(undefined);
-    setChainId(undefined);
     if (!provider) return;
-    const accounts = (a: unknown) => {
-      const list = a as string[];
-      setAccount(list?.[0] ? getAddress(list[0]) : undefined);
+    const accounts = (value: unknown) => {
+      const a = value as string[];
+      setAccount(a?.[0] ? getAddress(a[0]) : undefined);
     };
-    const chain = (id: unknown) => setChainId(Number(id));
-    const disconnect = () => {
+    const chain = (value: unknown) => setChainId(Number(value));
+    const disconnected = () => {
       setAccount(undefined);
       setChainId(undefined);
     };
     provider.on?.("accountsChanged", accounts);
     provider.on?.("chainChanged", chain);
-    provider.on?.("disconnect", disconnect);
+    provider.on?.("disconnect", disconnected);
     return () => {
       provider.removeListener?.("accountsChanged", accounts);
       provider.removeListener?.("chainChanged", chain);
-      provider.removeListener?.("disconnect", disconnect);
+      provider.removeListener?.("disconnect", disconnected);
     };
   }, [provider]);
-  const connect = async () => {
-    setError("");
-    if (!provider) {
-      setError(
-        "No browser wallet detected. Open this site in an Ethereum wallet browser or enable a wallet extension. You can still watch without a wallet.",
-      );
-      return;
-    }
+  const accept = async (p: Provider, gen: number) => {
+    const a = await p.request({ method: "eth_requestAccounts" });
+    const id = Number(await p.request({ method: "eth_chainId" }));
+    if (gen !== attempt.current) return;
+    if (!a[0]) throw Error("No wallet account selected. Try connecting again.");
+    setProvider(p);
+    setAccount(getAddress(a[0]));
+    setChainId(id);
+    setOpen(false);
+    setUri("");
+    setQr("");
+  };
+  const connect = async (p: Provider) => {
+    if (busy) return;
+    const gen = ++attempt.current;
     setBusy(true);
+    setError("");
     try {
-      const addresses = await provider.request({
-        method: "eth_requestAccounts",
-      });
-      setAccount(addresses[0] ? getAddress(addresses[0]) : undefined);
-      setChainId(Number(await provider.request({ method: "eth_chainId" })));
+      await accept(p, gen);
     } catch (e) {
-      setError(errorText(e));
+      if (gen === attempt.current) setError(errorText(e));
     } finally {
+      if (gen === attempt.current) setBusy(false);
+    }
+  };
+  const connectWC = async () => {
+    if (!runtime || busy) return;
+    const gen = ++attempt.current;
+    setBusy(true);
+    setError("");
+    setUri("");
+    setQr("");
+    try {
+      const { UniversalProvider, qrImage } = await import("../addons/wallet");
+      if (!wc.current)
+        wc.current = await UniversalProvider.init({
+          projectId: "3947504ee7f39ad210074c117aa8784c",
+          metadata: {
+            name: "PONZIRAMID",
+            description: "Build a brick. Chase the crown.",
+            url: "https://ponziram.sites.imd.fun",
+            icons: [new URL("./favicon.svg", location.href).href],
+          },
+        });
+      const client = wc.current;
+      const display = (value: string) => {
+        if (gen !== attempt.current) return;
+        setUri(value);
+        void qrImage(value).then((image) => {
+          if (gen === attempt.current) setQr(image);
+        });
+      };
+      client.on("display_uri", display);
+      try {
+        if (!client.session)
+          await client.connect({
+            namespaces: {
+              eip155: {
+                chains: ["eip155:1"],
+                methods: [
+                  "eth_sendTransaction",
+                  "personal_sign",
+                  "eth_signTypedData_v4",
+                  "wallet_switchEthereumChain",
+                ],
+                events: ["accountsChanged", "chainChanged"],
+                rpcMap: { "1": runtime.deployment.network.rpcUrls[0] },
+              },
+            },
+          });
+        if (gen === attempt.current)
+          await accept(client as unknown as Provider, gen);
+      } finally {
+        client.removeListener("display_uri", display);
+      }
+    } catch (e) {
+      if (gen === attempt.current) setError(errorText(e));
+    } finally {
+      if (gen === attempt.current) setBusy(false);
+    }
+  };
+  const setDialog = (value: boolean) => {
+    setOpen(value);
+    if (!value) {
+      attempt.current++;
+      wc.current?.abortPairingAttempt();
       setBusy(false);
+      setUri("");
+      setQr("");
     }
   };
   const switchChain = async () => {
@@ -120,18 +205,30 @@ export function useWallet(runtime: Runtime | undefined) {
   };
   return {
     options,
-    selected,
-    setSelected,
     provider,
     account,
     chainId,
     error,
     busy,
     connect,
+    connectWC,
     switchChain,
-    disconnect: () => {
+    open,
+    setOpen: setDialog,
+    uri,
+    qr,
+    disconnect: async () => {
+      attempt.current++;
       setAccount(undefined);
+      setChainId(undefined);
+      setProvider(undefined);
       setError("");
+      if (wc.current?.session)
+        try {
+          await wc.current.disconnect();
+        } catch {
+          /* Local disconnection still completed. */
+        }
     },
   };
 }

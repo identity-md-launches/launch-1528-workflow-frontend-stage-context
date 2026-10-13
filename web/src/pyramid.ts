@@ -1,20 +1,14 @@
-// Keep both SVG work and per-brick status reads bounded. Large rounds use an
-// overview plus a magnified, bottom-up page of recent individual bricks.
-export const DETAIL_LIMIT = 650n; // 1² + … + 12²
-export const RECENT_PAGE = 64n;
-const capacity = (side: number) => (side * (side + 1) * (2 * side + 1)) / 6;
-export function pyramidLayout(count = 0n) {
-  const grouped = count > DETAIL_LIMIT;
-  let groupSize = 1n;
-  while ((count + groupSize - 1n) / groupSize > DETAIL_LIMIT) groupSize *= 64n;
-  const units = Number((count + groupSize - 1n) / groupSize);
-  let side = 8;
-  while (capacity(side) < units) side++;
-  const detailStart = grouped ? ((count - 1n) / RECENT_PAGE) * RECENT_PAGE : 0n;
-  const detailCount = Number(count - detailStart);
-  return { grouped, groupSize, units, side, detailStart, detailCount };
-}
-export function sceneBrickIndices(count: bigint) {
-  const { detailStart, detailCount } = pyramidLayout(count);
-  return Array.from({ length: detailCount }, (_, i) => detailStart + BigInt(i));
+// Keep every plotted brick individually inspectable, including on a narrow phone.
+// Page arithmetic stays bigint so a large on-chain count cannot overflow Number.
+export function pyramidPage(count: bigint, page = 0n) {
+  const pages = count > 0n ? (count + 35n) / 36n : 1n;
+  const current = page < 0n ? 0n : page >= pages ? pages - 1n : page;
+  const offset = current * 36n;
+  return {
+    side: 8,
+    pages,
+    current,
+    offset,
+    visible: Number(count - offset > 36n ? 36n : count - offset),
+  };
 }

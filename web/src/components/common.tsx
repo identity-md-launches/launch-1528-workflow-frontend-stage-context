@@ -10,6 +10,72 @@ import {
   type Transaction,
 } from "../chain";
 import type { Runtime } from "../config";
+import { amount, shortAmount, tokenAmount, shortAddress } from "../format";
+import { HoverCard } from "./ui/overlays";
+export function CopyButton({
+  value,
+  label = "Copy exact value",
+}: {
+  value: string;
+  label?: string;
+}) {
+  const [copied, setCopied] = useState(false),
+    [failed, setFailed] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        className="icon-button"
+        aria-label={label}
+        onClick={async () => {
+          try {
+            await navigator.clipboard.writeText(value);
+            setCopied(true);
+            setFailed(false);
+          } catch {
+            setFailed(true);
+          }
+        }}
+      >
+        {copied ? <Check size={15} /> : <Copy size={15} />}
+      </button>
+      {failed && <span role="status">Select the value to copy.</span>}
+    </>
+  );
+}
+export function Amount({
+  value,
+  unit = "ETH",
+  decimals = 18,
+}: {
+  value?: bigint;
+  unit?: string;
+  decimals?: number;
+}) {
+  if (value === undefined)
+    return <span className="amount-placeholder muted">… {unit}</span>;
+  const exact = amount(value, decimals);
+  return (
+    <HoverCard
+      label={`Exact ${unit} amount`}
+      content={
+        <div className="exact-value">
+          <span>
+            {exact} {unit}
+          </span>
+          <CopyButton value={exact} />
+        </div>
+      }
+    >
+      <span className="numeric">
+        {unit === "ETH"
+          ? shortAmount(value, decimals)
+          : tokenAmount(value, decimals)}{" "}
+        <span className="unit">{unit}</span>
+      </span>
+    </HoverCard>
+  );
+}
 export function AddressView({
   address,
   explorer,
@@ -19,42 +85,35 @@ export function AddressView({
   explorer: string;
   label?: string;
 }) {
-  const [copied, setCopied] = useState(false),
-    [error, setError] = useState("");
   const full = getAddress(address);
   return (
-    <div className="address-view">
-      {label && <span className="muted">{label}</span>}
+    <span className="address-view">
+      {label && <span className="address-label">{label}</span>}
+      <HoverCard
+        label={`Show full ${label || "address"}`}
+        content={
+          <div className="exact-value">
+            <span>{full}</span>
+            <CopyButton value={full} />
+          </div>
+        }
+      >
+        {shortAddress(full)}
+      </HoverCard>
+      <CopyButton value={full} label={`Copy ${label || "address"}`} />
       <a
+        className="icon-button"
         href={`${explorer}/address/${full}`}
         target="_blank"
         rel="noreferrer"
-        className="address"
-        aria-label={`${label || "Address"} ${full} on explorer`}
+        aria-label={`View ${label || "address"} on Etherscan`}
       >
-        {full}
-        <ExternalLink size={13} aria-hidden="true" />
+        <ExternalLink size={14} />
       </a>
-      <Button
-        variant="ghost"
-        size="small"
-        aria-label={`Copy ${label || "address"}`}
-        onClick={async () => {
-          try {
-            await navigator.clipboard.writeText(full);
-            setCopied(true);
-            setError("");
-          } catch {
-            setError("Select and copy the address above.");
-          }
-        }}
-      >
-        {copied ? <Check size={16} /> : <Copy size={16} />}
-      </Button>
-      {error && <span role="status">{error}</span>}
-    </div>
+    </span>
   );
 }
+
 export function Stat({
   label,
   value,

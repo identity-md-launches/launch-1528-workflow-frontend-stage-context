@@ -1,3 +1,5 @@
+> Historical validation for the previous frontend. Current revamp results, limitations and screenshots are in [REVAMP_VALIDATION.md](REVAMP_VALIDATION.md).
+
 # Frontend worker validation
 
 Status: complete for the frontend write scope, subject to the explicit limitations below. This is a worker’s reproducible validation record, not independent certification. No deployment, publication, IPFS pin, mainnet signature or broadcast was performed.

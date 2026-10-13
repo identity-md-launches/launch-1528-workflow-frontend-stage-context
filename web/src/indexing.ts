@@ -7,35 +7,53 @@ export interface OwnedBrick extends Brick {
   dividends: bigint;
   diamond: bigint;
   canSettleDiamond: boolean;
+  isPharaoh: boolean;
+  finalized: boolean;
 }
 export async function loadBrick(
   r: Reader,
   c: Runtime,
   vault: Address,
   id: bigint,
+  block?: bigint,
 ): Promise<OwnedBrick> {
   const [brick, deposit, claim] = await Promise.all([
-    read<Brick>(r, c.game, c.abis.Ponziramid, "bricks", [id]),
-    read<readonly [Address, bigint]>(r, vault, c.abis.StoneVault, "deposits", [
-      id,
-    ]),
+    read<Brick>(r, c.game, c.abis.Ponziramid, "bricks", [id], block),
+    read<readonly [Address, bigint]>(
+      r,
+      vault,
+      c.abis.StoneVault,
+      "deposits",
+      [id],
+      block,
+    ),
     read<readonly [bigint, bigint]>(
       r,
       c.game,
       c.abis.Ponziramid,
       "claimableBrickETH",
       [id],
+      block,
     ),
   ]);
-  const round = await read<Round>(r, c.game, c.abis.Ponziramid, "rounds", [
-    brick.roundId,
-  ]);
+  const round = await read<Round>(
+    r,
+    c.game,
+    c.abis.Ponziramid,
+    "rounds",
+    [brick.roundId],
+    block,
+  );
   return {
     ...brick,
     id,
     deposit: deposit[1],
     dividends: claim[0],
     diamond: claim[1],
+    isPharaoh:
+      brick.indexInRound === round.placedBricks - 1n &&
+      brick.player.toLowerCase() === round.pharaoh.toLowerCase(),
+    finalized: round.finalized,
     canSettleDiamond:
       round.finalized && !brick.exitedBeforeExpiry && !brick.diamondClaimed,
   };

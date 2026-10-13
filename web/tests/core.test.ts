@@ -196,37 +196,17 @@ test("custom errors are actionable and countdown never goes negative", () => {
   assert.equal(countdown(3661n, 0n), "01:01:01");
 });
 
-test("pyramid capacity grows past 204 and bounds individual geometry/status reads", async () => {
-  const { pyramidLayout, sceneBrickIndices } = await import("../src/pyramid");
-  for (const count of [
-    0n,
-    1n,
-    204n,
-    205n,
-    285n,
-    286n,
-    650n,
-    651n,
-    704n,
-    705n,
-    41600n,
-    41601n,
-    2n ** 256n - 1n,
-  ]) {
-    const layout = pyramidLayout(count);
-    const indices = sceneBrickIndices(count);
-    const capacity =
-      (layout.side * (layout.side + 1) * (2 * layout.side + 1)) / 6;
-    assert(layout.units <= capacity);
-    assert(capacity <= 650);
-    assert(indices.length <= (layout.grouped ? 64 : 650));
-    assert.equal(new Set(indices).size, indices.length);
-    if (count) assert.equal(indices.at(-1), count - 1n);
-    if (!layout.grouped) assert.equal(indices.length, Number(count));
-    if (layout.grouped) assert.equal(indices[0] % 64n, 0n);
+test("pyramid pages keep all bricks addressable with bounded mobile geometry", async () => {
+  const { pyramidPage } = await import("../src/pyramid");
+  for (const count of [0n, 1n, 36n, 37n, 650n, 10000n, 2n ** 256n - 1n]) {
+    const first = pyramidPage(count),
+      last = pyramidPage(count, first.pages - 1n);
+    assert.equal(first.side, 8);
+    assert(first.visible <= 36);
+    assert(last.visible <= 36);
+    assert.equal(last.offset + BigInt(last.visible), count);
+    assert.equal(pyramidPage(count, first.pages).current, last.current);
   }
-  assert.equal(pyramidLayout(204n).side, 8);
-  assert.equal(pyramidLayout(205n).side, 9);
-  assert.equal(pyramidLayout(205n).units, 205);
-  assert.equal(sceneBrickIndices(651n)[0], 640n);
+  assert.equal(pyramidPage(37n).pages, 2n);
+  assert.equal(pyramidPage(37n, 1n).visible, 1);
 });

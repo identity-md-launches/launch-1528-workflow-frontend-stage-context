@@ -1,0 +1,98 @@
+{
+  "kind": "Mock EIP-1193 wallet and deterministic RPC; no real signing",
+  "at": "2026-10-13T12:23:20.724Z",
+  "results": [
+    {
+      "name": "Responsive production export: 320, 390, 700, 900, 1440; first-screen Build visible",
+      "passed": true
+    },
+    {
+      "name": "Single wallet dialog, focus trap, Escape restoration, no-wallet help",
+      "passed": true
+    },
+    {
+      "name": "Auto discovery: 3 bricks across 3 rounds and 12,500 blocks, adaptive ranges, no ID input",
+      "passed": true
+    },
+    {
+      "name": "Rounded ETH, compact tokens, tap exact value and copy control",
+      "passed": true
+    },
+    {
+      "name": "Pyramid follows latest page, supports manual browsing and resumes following",
+      "passed": true
+    },
+    {
+      "name": "Exact-value keyboard card reaches Copy and returns focus with Escape",
+      "passed": true
+    },
+    {
+      "name": "Build simulates and submits exact mainnet contract call/value",
+      "passed": true
+    },
+    {
+      "name": "Brick Sheet shows details and withdraws owned Stone",
+      "passed": true
+    },
+    {
+      "name": "Rewards Withdraw confirms risk then queues 3 refunds",
+      "passed": true
+    },
+    {
+      "name": "ETH Claim all queues each brick then claimETH; progress and receipts retained",
+      "passed": true
+    },
+    {
+      "name": "PONZIRAM Claim all queues only finished owned rounds",
+      "passed": true
+    },
+    {
+      "name": "Rejected Build reports no submission and can retry",
+      "passed": true
+    },
+    {
+      "name": "Rejected claim queue stops safely; retry does not skip an item",
+      "passed": true
+    },
+    {
+      "name": "Wrong network banner, exact add/switch, restored ready state",
+      "passed": true
+    },
+    {
+      "name": "Pause gates Build but refunds stay available",
+      "passed": true
+    },
+    {
+      "name": "Swap quote, minimum received, buy simulation and transaction",
+      "passed": true
+    },
+    {
+      "name": "Simulation failure prevents submission",
+      "passed": true
+    },
+    {
+      "name": "Wallet account changes clear old bricks and disable old queue",
+      "passed": true
+    },
+    {
+      "name": "Themes, reduced motion, keyboard focus and automated axe checks",
+      "passed": true
+    },
+    {
+      "name": "Connected header, rewards and all rule items reflow at 320/390/1440",
+      "passed": true
+    },
+    {
+      "name": "Unknown receipt blocks duplicate claims and can resume after a receipt-only check",
+      "passed": true
+    },
+    {
+      "name": "Zero-value finalized diamond settlement remains claimable",
+      "passed": true
+    },
+    {
+      "name": "WebKit mobile: connect, discovery, ETH queue, and no overflow",
+      "passed": true
+    }
+  ]
+}

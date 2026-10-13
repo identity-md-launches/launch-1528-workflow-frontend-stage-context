@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-13T12:11:02.568Z",
+  "kind": "Live Ethereum, read-only, no injected wallet, no signatures or broadcasts",
+  "source": "https://ethereum-rpc.publicnode.com",
+  "errors": [],
+  "checks": [
+    {
+      "name": "Ponziramid",
+      "codeBytes": 7044
+    },
+    {
+      "name": "LaunchToken",
+      "codeBytes": 1722
+    },
+    {
+      "name": "StoneVault",
+      "codeBytes": 1564
+    },
+    {
+      "name": "PonziRewards",
+      "codeBytes": 4859
+    }
+  ],
+  "chainId": 1,
+  "block": 26183484,
+  "bindings": {
+    "game": "0x7742dbfe2dd4f1fbd574f4ea9013bb5ab59946de",
+    "token": "0x6617deba90b1d2349e1c9bd24800380156b7647b",
+    "vault": "0x1d6Ae6E6f18706B8b107B10E2BDca80d78cCCB14",
+    "rewards": "0x8774330697Dc13D4011B78389d64527E08B16817"
+  },
+  "round": "73",
+  "quote": [
+    "73",
+    "1061677811864495",
+    "955510030678045",
+    "106167781186450"
+  ],
+  "paused": true,
+  "funded": true,
+  "rewardBalance": "628332947471030105718775010",
+  "activity": "On the sand\nLive activity\nBrick earnings claimed\nBrick #10782\nStone withdrawn\nBrick #10782\nStone withdrawn\nBrick #160\nBrick earnings claimed\nBrick #10478",
+  "hero": "Round 73\n12 bricks\n0xbF60…F6d0\n23:35:36\nTomb\n0.0027 ETH",
+  "swapQuote": "Estimated receive\n51.57K PONZIRAM\nMinimum receive\n51.32K PONZIRAM\nRate for this amount\n0.001 ETH\n →\n51.57K PONZIRAM\n\nQuote valid for 60 seconds. Swap deadline: 5 minutes.\n\nConnect a wallet to review approvals and swap.",
+  "firstScreenBuild": {
+    "box": {
+      "x": 33,
+      "y": 703.65625,
+      "width": 324,
+      "height": 46
+    },
+    "bar": {
+      "x": 0,
+      "y": 779,
+      "width": 390,
+      "height": 65
+    }
+  },
+  "passed": true
+}

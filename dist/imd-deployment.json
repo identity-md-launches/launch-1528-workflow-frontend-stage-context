@@ -36,16 +36,36 @@
       "sha256": "4a9d5afd1ddea9d9da042f322cb667a26b8b784f88c2e0d88a130a0f3541957a"
     },
     {
-      "path": "assets/ccip-CMLckArH.js",
-      "sha256": "72773d6adf9d39fab221a7a040905731ca3c418892593aa25df1a54095961f2d"
+      "path": "art/desert-noir.webp",
+      "sha256": "05a0b59e0b54aa6cacffe42366254d3bd0f75e847db090b14524009f2cfea696"
     },
     {
-      "path": "assets/index-CMLYPZqs.css",
-      "sha256": "f6dec193f1e9df67967ab1a3cbde4a6aceb4f10075aafdc7e540637851cc4ffb"
+      "path": "assets/ccip-Ci1VbLYm.js",
+      "sha256": "29fd4dcb3bd0541ecb1cafa52d8cc90fdcb107efb0fbc87a678f345f4ddae7d6"
     },
     {
-      "path": "assets/index-fPOI7nL3.js",
-      "sha256": "93d791d14b485a68071be743948f4936e559ec24f852117828a702ebe77f5f4a"
+      "path": "assets/index-BKWUorvx.js",
+      "sha256": "73f11febf9463d02b834f748e4c4ffe4dcbda140cf76b153ed37ae9d910d65c6"
+    },
+    {
+      "path": "assets/index-DwV7i2oC.css",
+      "sha256": "13bb42c2ecd6c95087a25598da16c8357da45c1032a64e0011fd61a2d6effe21"
+    },
+    {
+      "path": "assets/space-400-CECcns9T.woff2",
+      "sha256": "5b5b907c77faefb42c5b5d02119dc87deb7d11dbd57d74cfb0c5f9e8266d16d8"
+    },
+    {
+      "path": "assets/space-600-JHesfJui.woff2",
+      "sha256": "c0940c27e5808172c22f1ab2d76558e9a44c6ca389eaa996c7b57ef5f7e7388c"
+    },
+    {
+      "path": "assets/space-700-Da2D-ugj.woff2",
+      "sha256": "fb59a37cfd998bac83baaedf714a3466a4d9a18098c6d7aee3da5e714a7c1c8c"
+    },
+    {
+      "path": "assets/wallet-BL_XaMgI.js",
+      "sha256": "1e73d051eff305c5dbe374024a57b6bec7ddf02b5e056ce60406d4f3ca474ef7"
     },
     {
       "path": "favicon.svg",
@@ -53,7 +73,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "9e099ccb41e61e25ff61776d53774822452bc9c4a02cfc90892a8b0ba032f896"
+      "sha256": "1fd1d77b06bcf5ec065f283868bddca688a6d015942cae44711d3a5315b130c0"
     },
     {
       "path": "launch-provenance.json",
@@ -61,7 +81,7 @@
     },
     {
       "path": "share.png",
-      "sha256": "50e99d585e7e7a7f7a9c3dc2e8ba234a918947f3cade12f6fcdad4abd7532742"
+      "sha256": "c7d9590baa10df9eb60cb7d87d9a3d5b04b2bd8e89f54e71cac4be7c30105e84"
     }
   ],
   "poolKey": {

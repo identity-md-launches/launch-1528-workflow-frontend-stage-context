@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-13T12:24:49Z",
+  "method": "Copied all current tracked and nonignored submission files into a fresh isolated repository, committed there and created a self-contained current-tree Git bundle. Repository .git was not modified. Input files, scratch tests and separately uploaded artifacts were excluded.",
+  "limitBytes": 8388608,
+  "historicalBundleLimitation": "A separate full-history clone could not bundle the supplied history: unable to read Git object d5201285120b7ee86500a893ffa22fe3e766a111. This audit measures every current deliverable file, not unavailable ancestor history.",
+  "gitBundleBytes": 4247613,
+  "currentTreeBytes": 7685597,
+  "sourceFileCount": 195,
+  "distFileCount": 17,
+  "distBytes": 2396343,
+  "protectedPathChanges": [],
+  "gitlinks": 0,
+  "dependencyCacheFilesInSubmission": 0,
+  "diffWhitespaceCheck": "passed",
+  "bundleWithinLimit": true,
+  "note": "This audit report is excluded from its own measurement on the initial run; a subsequent run includes the prior report. Remaining headroom is substantially larger than this report."
+}

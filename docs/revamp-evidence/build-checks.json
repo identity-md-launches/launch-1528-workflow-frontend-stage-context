@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-13T12:24:10.305306+00:00",
+  "productionBuild": "passed: TypeScript, Vite, pinned ABI exporter",
+  "typecheck": "passed",
+  "manifestVerify": "passed",
+  "coreTests": {
+    "passed": 13,
+    "failed": 0
+  },
+  "revampCoreTests": {
+    "passed": 5,
+    "failed": 0
+  },
+  "cleanInstall": {
+    "root": "npm ci --offline from cache: passed",
+    "addons": "npm ci --legacy-peer-deps --offline from cache: passed",
+    "build": "passed",
+    "networkRequiredForBuild": false
+  },
+  "cleanBuildByteComparison": {
+    "passed": true,
+    "filesCompared": 17
+  },
+  "warnings": [
+    "Main and lazy WalletConnect chunks exceed 500 kB uncompressed",
+    "Rollup removed one upstream ox PURE annotation"
+  ],
+  "contractsChanged": false,
+  "realWalletSigningPerformed": false
+}

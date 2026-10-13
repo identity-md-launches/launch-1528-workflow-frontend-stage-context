@@ -1,3 +1,24 @@
+# PONZIRAMID website revamp
+
+The updated static site is in `dist/`, with React/TypeScript source in `web/`. It keeps the live Ethereum contracts and addresses, adds automatic wallet brick discovery and claim queues, and provides Obsidian/Sun Club themes with original desert artwork.
+
+```sh
+npm ci --prefix web
+npm ci --prefix web/addons --legacy-peer-deps
+npm run typecheck --prefix web
+npm run build --prefix web
+npm run verify --prefix web
+node web/scripts/preview.mjs 4173
+```
+
+Preview at `http://127.0.0.1:4173/preview/`. The second locked install shares React with the existing application; the existing build configuration and lockfiles are unchanged. A full clone must retain the pinned source commit for ABI export.
+
+See [frontend setup and behavior](web/README.md), [implemented design](DESIGN.md), and [validation with before/after screenshots](docs/REVAMP_VALIDATION.md). The committed export is the publisher's input for the same site URL. No on-chain deployment or direct publication is performed here. Browser wallet flows are simulated; live chain reads and WalletConnect QR creation were checked, but no real wallet signed transactions.
+
+---
+
+The contract documentation below describes the existing deployment and is retained as reference.
+
 # PONZIRAMID contracts
 
 > A game. 90% of every brick is refundable, 10% is not. Prizes come from other players' fees. Not an investment.

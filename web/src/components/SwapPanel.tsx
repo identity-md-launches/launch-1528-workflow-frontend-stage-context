@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDownUp, ExternalLink } from "lucide-react";
 import { zeroAddress } from "viem";
 import { Button } from "./ui/button";
-import { TxAction, type ActionContext } from "./common";
+import { Amount, TxAction, type ActionContext } from "./common";
 import { errorText, read, type Snapshot } from "../chain";
 import {
   nextSwapStep,
@@ -11,7 +11,7 @@ import {
   tradeCurrencies,
   type Quote,
 } from "../protocol";
-import { amount, parseAmount } from "../format";
+import { shortAmount, tokenAmount, parseAmount } from "../format";
 export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
   const [buy, setBuy] = useState(true),
     [input, setInput] = useState(""),
@@ -130,14 +130,12 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
   };
   const expired = !!quote && clock - quote.created > 60_000;
   return (
-    <section id="trade" className="panel">
+    <section id="trade" className="panel swap-panel">
       <div className="section-title">
         <h2>Trade {s?.symbol || "the token"}</h2>
         <ArrowDownUp size={22} aria-hidden="true" />
       </div>
-      <p className="muted">
-        The attested Uniswap v4 pool. Trading is separate from the game.
-      </p>
+      <p className="muted">Uniswap v4 · Ethereum</p>
       <div className="segmented" role="group" aria-label="Trade direction">
         <Button
           disabled={ctx.busy === "swap"}
@@ -183,8 +181,7 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
         {ctx.runtime.deployment.poolKey
           ? ctx.runtime.deployment.poolKey.fee / 10000
           : "Unavailable"}
-        %. Gas is additional. No guaranteed token value. USD context is
-        unavailable.
+        %. Gas extra. Token value is not guaranteed.
       </p>
       <Button
         disabled={!s || loading || !pairMeta || !!ctx.busy}
@@ -198,24 +195,37 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
             <div>
               <dt>Estimated receive</dt>
               <dd>
-                {amount(quote.amountOut, quote.outputDecimals)}{" "}
-                {quote.outputSymbol}
+                <Amount
+                  value={quote.amountOut}
+                  decimals={quote.outputDecimals}
+                  unit={quote.outputSymbol}
+                />
               </dd>
             </div>
             <div>
               <dt>Minimum receive</dt>
               <dd>
-                {amount(quote.minOut, quote.outputDecimals)}{" "}
-                {quote.outputSymbol}
+                <Amount
+                  value={quote.minOut}
+                  decimals={quote.outputDecimals}
+                  unit={quote.outputSymbol}
+                />
               </dd>
             </div>
             <div>
               <dt>Rate for this amount</dt>
               <dd>
-                {amount(quote.amountIn, quote.inputDecimals)}{" "}
-                {quote.inputSymbol} →{" "}
-                {amount(quote.amountOut, quote.outputDecimals)}{" "}
-                {quote.outputSymbol}
+                <Amount
+                  value={quote.amountIn}
+                  decimals={quote.inputDecimals}
+                  unit={quote.inputSymbol}
+                />{" "}
+                →
+                <Amount
+                  value={quote.amountOut}
+                  decimals={quote.outputDecimals}
+                  unit={quote.outputSymbol}
+                />
               </dd>
             </div>
           </dl>
@@ -272,7 +282,7 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
               }}
               hint={
                 step.final
-                  ? `Swap ${amount(quote.amountIn, quote.inputDecimals)} ${quote.inputSymbol} for at least ${amount(quote.minOut, quote.outputDecimals)} ${quote.outputSymbol}.`
+                  ? `Review the minimum received above. Amounts are rounded; tap for exact values.`
                   : "Exact-amount permission only. Each approval is a separate transaction; then refresh the quote if it expires."
               }
             />

@@ -1,12 +1,31 @@
 import { formatUnits, parseUnits } from "viem";
 export const amount = (n: bigint | undefined, decimals = 18) =>
   n === undefined ? "Unavailable" : formatUnits(n, decimals);
+function rounded(n: bigint, decimals: number, places: number) {
+  if (decimals <= places) return formatUnits(n, decimals);
+  const step = 10n ** BigInt(decimals - places);
+  const r = (n + step / 2n) / step;
+  return formatUnits(r, places);
+}
 export const shortAmount = (n: bigint | undefined, decimals = 18) => {
-  if (n === undefined) return "Unavailable";
-  const s = formatUnits(n, decimals);
-  const [a, b] = s.split(".");
-  return `${BigInt(a).toLocaleString("en-US")}${b ? `.${b.slice(0, 6)}` : ""}${b && b.length > 6 ? "…" : ""}`;
+  if (n === undefined) return "…";
+  if (n > 0n && n * 10000n < 10n ** BigInt(decimals)) return "<0.0001";
+  return rounded(n, decimals, 4);
 };
+export const tokenAmount = (n: bigint | undefined, decimals = 18) => {
+  if (n === undefined) return "…";
+  for (const [exponent, suffix] of [
+    [12, "T"],
+    [9, "B"],
+    [6, "M"],
+    [3, "K"],
+  ] as const)
+    if (n >= 10n ** BigInt(decimals + exponent))
+      return rounded(n, decimals + exponent, 2) + suffix;
+  if (n > 0n && n * 100n < 10n ** BigInt(decimals)) return "<0.01";
+  return rounded(n, decimals, 2);
+};
+export const shortAddress = (s: string) => `${s.slice(0, 6)}…${s.slice(-4)}`;
 export function parseAmount(value: string, decimals = 18) {
   if (!/^\d+(\.\d+)?$/.test(value.trim()))
     throw Error("Enter a positive decimal amount.");
@@ -18,8 +37,7 @@ export function parseAmount(value: string, decimals = 18) {
 }
 export function countdown(expires: bigint, now: bigint) {
   const s = expires > now ? expires - now : 0n;
-  const hours = s / 3600n,
-    minutes = (s % 3600n) / 60n,
-    seconds = s % 60n;
-  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  return [s / 3600n, (s % 3600n) / 60n, s % 60n]
+    .map((n) => n.toString().padStart(2, "0"))
+    .join(":");
 }
