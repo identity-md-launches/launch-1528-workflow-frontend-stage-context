@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "e7a3968e3b4f655cc70d4d2ad6b67fc5c41f5f1f",
+  "deployments": [
+    {
+      "name": "LaunchToken",
+      "txHash": "0xe01dde1b26e3b0e98dac7e1c2bed7e2b4db82a9b8e8c0a8178afda49fe68ed09",
+      "blockNumber": 26181772
+    },
+    {
+      "name": "Ponziramid",
+      "txHash": "0xe01dde1b26e3b0e98dac7e1c2bed7e2b4db82a9b8e8c0a8178afda49fe68ed09",
+      "blockNumber": 26181772
+    }
+  ]
+}

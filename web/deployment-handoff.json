@@ -1,0 +1,60 @@
+{
+  "chainId": 1,
+  "poolKey": {
+    "fee": 12500,
+    "hooks": "0x784ff9a3ac5d88a30bfff6f7f2a270161fbe6000",
+    "currency0": "0x0000000000000000000000000000000000000000",
+    "currency1": "0x6617deba90b1d2349e1c9bd24800380156b7647b",
+    "tickSpacing": 60
+  },
+  "repoUrl": "https://github.com/identity-md-launches/launch-1509-workflow-contract-stage-context",
+  "version": 1,
+  "launchId": "816b9b05-a6a6-4668-9cc4-97e64ac6c8a0",
+  "manifest": {
+    "kind": "evm_project",
+    "pool": {
+      "fee": 12500,
+      "tickSpacing": 60,
+      "initialPrice": "79228162514264337593543950336",
+      "pairedCurrency": "0x0000000000000000000000000000000000000000"
+    },
+    "notes": "Ponziramid(address token_, address owner_, uint256 creatorAllocation_) creates and permanently binds its StoneVault and PonziRewards during construction; their addresses are available through vault(), rewards() and CustodyCreated. They are not separate manifest deployments, and no initialization calls are required. token_ is the launch token and owner_ is the launch's owner, who receives the game's owner Mortar fees and can pause building. creatorAllocation_ is 700000000000000000000000000 minor units (700,000,000 PONZIRAM), the 70% of the fixed supply this launch pays the wallet that funds the game; it is stored once as PonziRewards.INITIAL_FUNDING, the one-time funding gate, and grants no role. StoneVault holds refundable player principal; PonziRewards holds permanent token funding and pays verified player claims. After deployment, the creator funds PonziRewards using an ERC-20 approval followed by fund(amount). No round can start until PonziRewards has held INITIAL_FUNDING once; each new round then requires 1,000,000 uncommitted PONZIRAM. No application receives tokens during construction. The factory supplies the LP, MerkleDistributor and initialization-only pool guard. The native ETH pool fee is 1.25%; the deployer derives the effective opening price from the policy's 10 ETH opening market cap.",
+    "token": {
+      "name": "PONZIRAMID",
+      "symbol": "PONZIRAM",
+      "contract": "LaunchToken",
+      "decimals": 18
+    },
+    "contracts": [
+      {
+        "contract": "Ponziramid",
+        "constructorArgs": [
+          "$token",
+          "$owner",
+          "700000000000000000000000000"
+        ]
+      }
+    ]
+  },
+  "contracts": [
+    {
+      "name": "LaunchToken",
+      "txHash": "0xe01dde1b26e3b0e98dac7e1c2bed7e2b4db82a9b8e8c0a8178afda49fe68ed09",
+      "abiHash": "38880b8e56d42ce900f744a7908c7139632a49f1c3f33385c64ceaed29d37bee",
+      "address": "0x6617deba90b1d2349e1c9bd24800380156b7647b",
+      "blockNumber": 26181772,
+      "creationCodeHash": "159fd0d39d0bde2f7f31d60d26ca87a24be9fe4f8a28060bce77016720e36cf5"
+    },
+    {
+      "name": "Ponziramid",
+      "txHash": "0xe01dde1b26e3b0e98dac7e1c2bed7e2b4db82a9b8e8c0a8178afda49fe68ed09",
+      "abiHash": "456805996b5c1d77dc9651e22eb64667c7d6df0b7d26097ad352aea9ee8588ae",
+      "address": "0x7742dbfe2dd4f1fbd574f4ea9013bb5ab59946de",
+      "blockNumber": 26181772,
+      "creationCodeHash": "b3917da98824b23ec707f53a49f6e042ca11d1580cff728d2b26047c2910b98a"
+    }
+  ],
+  "sourceCommit": "e7a3968e3b4f655cc70d4d2ad6b67fc5c41f5f1f",
+  "abiInstructions": "Build ABIs from this exact source commit; compare canonicalKeccak(abi) with abiHash. Verify deployed code on the stated chain before enabling transactions.",
+  "attestationHash": "177086251c6b270e06434659d7fc5fa053a07bc6c314c481b695230b68e1a76f"
+}

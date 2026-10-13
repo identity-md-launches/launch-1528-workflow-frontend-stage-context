@@ -1,0 +1,9 @@
+# Explicit path budget: web/.gitignore only; dependencies/caches at every web nesting level.
+**/node_modules/
+**/.cache/
+**/.npm/
+**/.vite/
+**/coverage/
+**/test-results/
+**/playwright-report/
+*.tsbuildinfo

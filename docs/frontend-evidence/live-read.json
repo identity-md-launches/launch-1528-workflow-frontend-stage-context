@@ -1,0 +1,94 @@
+{
+  "kind": "Read-only live chain observations from the production export; no wallet or transaction broadcast",
+  "at": "2026-10-13T07:12:45.103Z",
+  "chainId": 1,
+  "sourceCommit": "e7a3968e3b4f655cc70d4d2ad6b67fc5c41f5f1f",
+  "rpc": "https://ethereum-rpc.publicnode.com",
+  "observedChainId": 1,
+  "blockNumber": 26181996,
+  "bindings": {
+    "game": "0x7742dbfe2dd4f1fbd574f4ea9013bb5ab59946de",
+    "token": "0x6617deba90b1d2349e1c9bd24800380156b7647b",
+    "vault": "0x1d6Ae6E6f18706B8b107B10E2BDca80d78cCCB14",
+    "rewards": "0x8774330697Dc13D4011B78389d64527E08B16817",
+    "owner": "0x0A5b0e232d47541eB503bC862a9DB2672b8fBa24",
+    "vaultGame": "0x7742DBfE2DD4F1fbD574f4eA9013bb5Ab59946dE",
+    "rewardsGame": "0x7742DBfE2DD4F1fbD574f4eA9013bb5Ab59946dE",
+    "rewardsToken": "0x6617deba90B1D2349E1c9BD24800380156B7647B"
+  },
+  "code": [
+    {
+      "name": "LaunchToken",
+      "address": "0x6617deba90b1d2349e1c9bd24800380156b7647b",
+      "bytes": 1722,
+      "sha256": "34c88e2345fc1b93f60ace20e3933e251f0bff4149e279544ba3a6a72459062f"
+    },
+    {
+      "name": "Ponziramid",
+      "address": "0x7742dbfe2dd4f1fbd574f4ea9013bb5ab59946de",
+      "bytes": 7044,
+      "sha256": "9f4e0d898dc05a3a06e1aefe963f11aa3e55f79d8e2e4ca7e747c5739c8a6d04"
+    },
+    {
+      "name": "StoneVault",
+      "address": "0x1d6Ae6E6f18706B8b107B10E2BDca80d78cCCB14",
+      "bytes": 1564,
+      "sha256": "da0bcd352836db472dccb23d9b45b90b3c914aa19b21b088ac76b5765e211d88"
+    },
+    {
+      "name": "PonziRewards",
+      "address": "0x8774330697Dc13D4011B78389d64527E08B16817",
+      "bytes": 4859,
+      "sha256": "3b1ff6e4949a2fc7f398a4a7c2ebe7ff7cc41f74aa751adf1110531369621d47"
+    }
+  ],
+  "deploymentReceipt": {
+    "hash": "0xe01dde1b26e3b0e98dac7e1c2bed7e2b4db82a9b8e8c0a8178afda49fe68ed09",
+    "blockNumber": 26181772,
+    "status": "success",
+    "allocationRecipient": "0x0A5b0e232d47541eB503bC862a9DB2672b8fBa24",
+    "allocationMinorUnits": "700000000000000000000004270"
+  },
+  "game": {
+    "roundId": "0",
+    "paused": false,
+    "quoteWei": {
+      "roundId": "1",
+      "price": "1000000000000000",
+      "stone": "900000000000000",
+      "mortar": "100000000000000"
+    }
+  },
+  "funding": {
+    "initialFunding": "700000000000000000000000000",
+    "initialFundingReached": false,
+    "rewardBalance": "0",
+    "committed": "0",
+    "uncommitted": "0",
+    "creatorBalance": "700000000000000000000004270"
+  },
+  "vault": {
+    "totalStone": "0",
+    "balance": "0"
+  },
+  "fundingHistory": {
+    "fromBlock": 26181772,
+    "toBlock": 26181996,
+    "completeThroughObservation": true,
+    "transactionHashes": []
+  },
+  "liveQuote": {
+    "input": "0.001 ETH",
+    "renderedResult": "Trade PONZIRAM\n\nThe attested Uniswap v4 pool. Trading is separate from the game.\n\nBuy PONZIRAM\nSell PONZIRAM\nYou pay (ETH)\nMaximum slippage\n0.1%\n0.5%\n1%\n3%\n\nPool fee: 1.25%. Gas is additional. No guaranteed token value. USD context is unavailable.\n\nGet quote\nEstimated receive\n13332.31691164713942646 PONZIRAM\nMinimum receive\n13265.655327088903729327 PONZIRAM\nRate for this amount\n0.001 ETH → 13332.31691164713942646 PONZIRAM\n\nQuote valid for 60 seconds. Swap deadline: 5 minutes.\n\nConnect a wallet to review approvals and swap.\n\nView configured pool manager",
+    "broadcast": false
+  },
+  "primaryActionAt390": {
+    "x": 33,
+    "y": 683.1875,
+    "width": 324,
+    "height": 48
+  },
+  "renderedFunding": "Nothing kept in the shadows\n\nPermanent rewards. Public balances. Verify every deposit.\n\nNOT FUNDED\nReward pool balance\n0 PONZIRAM\nCommitted to players\n0 PONZIRAM\nUncommitted rewards\n0 PONZIRAM\nCreator’s current balance\n700000000.00000000000000427 PONZIRAM\nTarget: 0 after the creator’s full deposit\n\nInitial funding threshold: 700000000 PONZIRAM. This gate is permanent once reached; later reward payouts can reduce the balance.\n\nAllocation recipient, verified from deployment receipt\n0x0A5b0e232d47541eB503bC862a9DB2672b8fBa24\nFunding receipts\n\nNo fund() deposit found in the scanned history.\n\nScan next funding blocks\n\nVerified from the reward pool’s Funded events. Scanned through block 26,181,996. Direct token transfers do not emit Funded.\n\nFund the reward pool",
+  "consoleErrors": [],
+  "localFailures": []
+}
