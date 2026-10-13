@@ -36,16 +36,16 @@
       "sha256": "4a9d5afd1ddea9d9da042f322cb667a26b8b784f88c2e0d88a130a0f3541957a"
     },
     {
-      "path": "assets/ccip-BQnFW5Tf.js",
-      "sha256": "299a09e9ce240856a6dc6118bf4d0b74c5a93856d2a21319548c01adb71c2624"
+      "path": "assets/ccip-CMLckArH.js",
+      "sha256": "72773d6adf9d39fab221a7a040905731ca3c418892593aa25df1a54095961f2d"
     },
     {
-      "path": "assets/index-AbFxnWHM.css",
-      "sha256": "def71f497ae9d6d54e3445a589703d363fa4bb8e4aef447ad733016a58d0dba8"
+      "path": "assets/index-CMLYPZqs.css",
+      "sha256": "f6dec193f1e9df67967ab1a3cbde4a6aceb4f10075aafdc7e540637851cc4ffb"
     },
     {
-      "path": "assets/index-DKEjKPzg.js",
-      "sha256": "83014b9a9a32f350845d7fd09d0960cbf82cabedb0244c6075c146aff83e177b"
+      "path": "assets/index-fPOI7nL3.js",
+      "sha256": "93d791d14b485a68071be743948f4936e559ec24f852117828a702ebe77f5f4a"
     },
     {
       "path": "favicon.svg",
@@ -53,7 +53,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "bc6200cde30e5c65c358f88f312509eb4d07533501e93943387549807e1b43a8"
+      "sha256": "9e099ccb41e61e25ff61776d53774822452bc9c4a02cfc90892a8b0ba032f896"
     },
     {
       "path": "launch-provenance.json",

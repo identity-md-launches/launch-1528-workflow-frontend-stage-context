@@ -1,28 +1,31 @@
 import { useMemo, useState } from "react";
 import { Crown, Pause, Play } from "lucide-react";
 import { Button } from "./ui/button";
+import { pyramidLayout } from "../pyramid";
 export function Pyramid({
   count,
-  withdrawn = new Set<number>(),
+  withdrawn = new Set<bigint>(),
   loading = false,
   statusesUnavailable = false,
 }: {
   count?: bigint;
-  withdrawn?: Set<number>;
+  withdrawn?: Set<bigint>;
   loading?: boolean;
   statusesUnavailable?: boolean;
 }) {
   const [motion, setMotion] = useState(true);
+  const layout = useMemo(() => pyramidLayout(count), [count]);
+  const { side, grouped, groupSize, detailStart, detailCount, units } = layout;
   const shapes = useMemo(() => {
     const blocks = [];
     let index = 0;
     const project = (x: number, y: number, z: number) => [
-      280 + (x - y) * 25,
-      140 + (x + y) * 12.5 - z * 26,
+      280 + (x - y) * (200 / side),
+      140 + (x + y) * (100 / side) - z * (208 / side),
     ];
     const points = (a: number[][]) => a.map((p) => p.join(",")).join(" ");
-    for (let z = 0; z < 8; z++) {
-      const size = 8 - z;
+    for (let z = 0; z < side; z++) {
+      const size = side - z;
       for (let y = 0; y < size; y++)
         for (let x = 0; x < size; x++) {
           const xx = x + z / 2,
@@ -31,7 +34,7 @@ export function Pyramid({
             b = project(xx + 0.95, yy, z),
             cc = project(xx + 0.95, yy + 0.95, z),
             d = project(xx, yy + 0.95, z);
-          const down = (p: number[]) => [p[0], p[1] + 23];
+          const down = (p: number[]) => [p[0], p[1] + 184 / side];
           blocks.push({
             index: index++,
             top: points([a, b, cc, d]),
@@ -42,10 +45,14 @@ export function Pyramid({
         }
     }
     return blocks;
-  }, []);
-  const visible = count === undefined ? 0 : Number(count > 204n ? 204n : count);
+  }, [side]);
+  const representation = grouped
+    ? `Overview: up to ${groupSize.toLocaleString()} bricks per stone. Bricks ${(detailStart + 1n).toLocaleString()}–${count!.toLocaleString()} enlarged below; dark bricks have withdrawn Stone.`
+    : "Individual bricks, filled bottom-up. Dark bricks have withdrawn Stone.";
   return (
-    <div className={`pyramid-scene ${motion ? "" : "motion-paused"}`}>
+    <div
+      className={`pyramid-scene ${grouped ? "grouped-scene" : ""} ${motion ? "" : "motion-paused"}`}
+    >
       <div className="scene-heading">
         <span>
           {loading
@@ -65,12 +72,12 @@ export function Pyramid({
       </div>
       <svg
         className="pyramid"
-        viewBox="0 -100 560 490"
+        viewBox={grouped ? "0 -100 560 650" : "0 -100 560 490"}
         role="img"
         aria-label={
           count === undefined
             ? "Pyramid blueprint, waiting for live chain data"
-            : `Isometric pyramid with ${count} confirmed bricks. Withdrawn Stone is shown in dark stone.`
+            : `Isometric pyramid with ${count} confirmed bricks. ${representation}${statusesUnavailable ? " Withdrawal statuses are unavailable." : ""}`
         }
       >
         <defs>
@@ -87,13 +94,20 @@ export function Pyramid({
           strokeDasharray="3 8"
         />
         {shapes.map((b) => {
-          const filled = b.index < visible,
-            off = withdrawn.has(b.index);
+          const filled = b.index < units,
+            off = !grouped && withdrawn.has(BigInt(b.index));
           return (
             <g
               key={b.index}
               opacity={filled ? (statusesUnavailable ? 0.4 : 1) : 0.07}
-              className={filled ? "confirmed-brick" : "blueprint-brick"}
+              className={
+                filled
+                  ? grouped
+                    ? "aggregate-brick"
+                    : "confirmed-brick"
+                  : "blueprint-brick"
+              }
+              data-index={grouped ? undefined : b.index}
             >
               <polygon
                 points={b.left}
@@ -116,6 +130,35 @@ export function Pyramid({
             </g>
           );
         })}
+        {grouped &&
+          Array.from({ length: 64 }, (_, i) => {
+            // An enlarged 8×8 course makes each newly confirmed brick visible,
+            // even when one overview stone represents many thousands of bricks.
+            const x = 70 + (i % 8) * 48 + Math.floor(i / 8) * 5;
+            const y = 370 + Math.floor(i / 8) * 18;
+            const filled = i < detailCount;
+            const index = detailStart + BigInt(i);
+            const off = withdrawn.has(index);
+            return (
+              <g
+                key={index.toString()}
+                data-index={index.toString()}
+                className={filled ? "confirmed-brick" : "blueprint-brick"}
+                opacity={filled ? (statusesUnavailable ? 0.4 : 1) : 0.07}
+              >
+                <path
+                  d={`M${x} ${y}h42v12l-6 4h-42v-12Z`}
+                  fill={off ? "#635c4f" : "#c49860"}
+                  stroke="#171815"
+                />
+                <path
+                  d={`M${x} ${y}h42l-6 4h-42Z`}
+                  fill={off ? "#807566" : "#ead1a5"}
+                  stroke="#171815"
+                />
+              </g>
+            );
+          })}
       </svg>
       <Crown
         className="scene-crown"
@@ -123,11 +166,11 @@ export function Pyramid({
         strokeWidth={1.5}
         aria-hidden="true"
       />
-      <div className="scene-caption">
-        {visible === 0
+      <div className={`scene-caption ${grouped ? "representation-limit" : ""}`}>
+        {units === 0
           ? "Every monument begins with one brick."
-          : count && count > 204n
-            ? "First 204 slots shown. All confirmed bricks count."
+          : grouped
+            ? representation
             : "Built together. One confirmed brick at a time."}
       </div>
     </div>

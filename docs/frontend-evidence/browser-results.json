@@ -1,116 +1,116 @@
 {
   "kind": "Worker-run mocked browser validation; no real transactions",
-  "at": "2026-10-13T07:59:39.594Z",
+  "at": "2026-10-13T08:37:38.471Z",
   "results": [
     {
       "name": "Chromium: 320/390/660/850/1440 export reflow and first-screen primary action",
       "passed": true,
-      "durationMs": 2387
+      "durationMs": 1709
     },
     {
       "name": "No wallet: connect explains installation, read-only values remain visible",
       "passed": true,
-      "durationMs": 1463
+      "durationMs": 1282
     },
     {
       "name": "Wrong chain: add unknown chain with exact network handoff, switch, enable build",
       "passed": true,
-      "durationMs": 2305
+      "durationMs": 1815
     },
     {
       "name": "Build: simulation before signature, exact price/round/value, confirmed state, consecutive lock",
       "passed": true,
-      "durationMs": 3315
+      "durationMs": 2075
     },
     {
       "name": "Wallet rejection: persistent error, no submission, primary action unlocks",
       "passed": true,
-      "durationMs": 2250
+      "durationMs": 1790
     },
     {
       "name": "Simulation failure: decoded error prevents wallet submission",
       "passed": true,
-      "durationMs": 2028
+      "durationMs": 1798
     },
     {
       "name": "Unfunded initial round and owner pause gate Build without blocking refunds",
       "passed": true,
-      "durationMs": 2665
+      "durationMs": 2268
     },
     {
       "name": "Historical brick scan, refund recipient validation, per-brick ETH and credited ETH claims",
       "passed": true,
-      "durationMs": 3412
+      "durationMs": 2725
     },
     {
       "name": "Finalize expired round and claim one historical token reward, preventing repeat claim",
       "passed": true,
-      "durationMs": 3443
+      "durationMs": 2640
     },
     {
       "name": "Permanent funding: exact approval is separate, acknowledgment required, deposit confirmed",
       "passed": true,
-      "durationMs": 2727
+      "durationMs": 2376
     },
     {
       "name": "Native swap: quote is eth_call, no approvals, exact network router and pool key",
       "passed": true,
-      "durationMs": 3276
+      "durationMs": 2904
     },
     {
       "name": "Token sale: exact ERC20 to Permit2, Permit2 to router, then zero-value execute",
       "passed": true,
-      "durationMs": 5988
+      "durationMs": 4770
     },
     {
       "name": "Keyboard flow, reduced motion, long values and account-change reset",
       "passed": true,
-      "durationMs": 3588
+      "durationMs": 3138
     },
     {
       "name": "Missing deployed code is a visible failure and keeps transaction controls disabled",
       "passed": true,
-      "durationMs": 705
+      "durationMs": 504
     },
     {
       "name": "Owner controls follow the connected owner and pause only new builds",
       "passed": true,
-      "durationMs": 4667
+      "durationMs": 3113
     },
     {
       "name": "A finalized zero-value diamond share can still settle rounding",
       "passed": true,
-      "durationMs": 3660
+      "durationMs": 2401
     },
     {
       "name": "Account changes during pending receipts cannot restore the old wallet balance",
       "passed": true,
-      "durationMs": 9570
+      "durationMs": 7511
     },
     {
       "name": "Pending receipt holds action locks until chain confirmation",
       "passed": true,
-      "durationMs": 2938
+      "durationMs": 2012
     },
     {
       "name": "RPC failure is recoverable without inventing state",
       "passed": true,
-      "durationMs": 2923
+      "durationMs": 2019
     },
     {
       "name": "ABI asset tampering is rejected before RPC or wallet actions",
       "passed": true,
-      "durationMs": 509
+      "durationMs": 369
     },
     {
       "name": "Automated accessibility: disconnected and connected expanded forms",
       "passed": true,
-      "durationMs": 6406
+      "durationMs": 4876
     },
     {
       "name": "WebKit: mobile rendering, wallet build, refund and reduced motion",
       "passed": true,
-      "durationMs": 9766
+      "durationMs": 4457
     }
   ]
 }

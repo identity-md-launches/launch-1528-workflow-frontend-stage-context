@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-13T08:20:25.124Z",
+  "results": [
+    {
+      "finding": "pyramid",
+      "reproduced": true,
+      "beforeCount": 204,
+      "afterCount": 204,
+      "beforeHash": "63b4276222488e315c1b682e6c755e1d90ef8e4a200769275261bdd93acdb522",
+      "afterHash": "63b4276222488e315c1b682e6c755e1d90ef8e4a200769275261bdd93acdb522",
+      "caption": {
+        "text": "First 204 slots shown. All confirmed bricks count.",
+        "display": "none"
+      }
+    },
+    {
+      "finding": "quote race",
+      "reproduced": true,
+      "result": "Estimated receive\n250 PONZIRAM\nMinimum receive\n248.75 PONZIRAM\nRate for this amount\n0.001 ETH → 250 PONZIRAM\n\nQuote valid for 60 seconds. Swap deadline: 5 minutes.\n\nSwap tokens\n\nSwap 0.001 ETH for at least 248.75 PONZIRAM.",
+      "submittedValue": "0x38d7ea4c68000"
+    },
+    {
+      "finding": "cancellation",
+      "reproduced": true,
+      "history": "Recent transactions\nBuild a brick: confirmed. View receipt \nBuild a brick: waiting for confirmation. View receipt ",
+      "confirmedBricks": "5"
+    },
+    {
+      "finding": "tomb",
+      "reproduced": true,
+      "stat": "ETH Tomb\n0.000459… ETH",
+      "exactDisplay": "none"
+    }
+  ]
+}

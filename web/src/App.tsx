@@ -20,6 +20,7 @@ import {
   type ActionContext,
 } from "./components/common";
 import { Pyramid } from "./components/Pyramid";
+import { sceneBrickIndices } from "./pyramid";
 import { WalletPanel } from "./components/WalletPanel";
 import { FundingPanel } from "./components/FundingPanel";
 import { SwapPanel } from "./components/SwapPanel";
@@ -28,11 +29,11 @@ function Game() {
     { id: string; label: string; stage: string; hash: Hex }[]
   >([]);
   const recordTransaction = useCallback(
-    (id: string, label: string, stage: string, hash: Hex) =>
+    (id: string, label: string, stage: string, hash: Hex, replaces?: Hex) =>
       setTransactions((prev) =>
         [
           { id, label, stage, hash },
-          ...prev.filter((t) => t.hash !== hash),
+          ...prev.filter((t) => t.hash !== hash && t.hash !== replaces),
         ].slice(0, 6),
       ),
     [],
@@ -48,7 +49,7 @@ function Game() {
   const s = game.snapshot;
   const [busy, setBusy] = useState(""),
     [now, setNow] = useState(Date.now()),
-    [withdrawn, setWithdrawn] = useState<Set<number>>(new Set()),
+    [withdrawn, setWithdrawn] = useState<Set<bigint>>(new Set()),
     [sceneError, setSceneError] = useState(false);
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
@@ -60,17 +61,14 @@ function Game() {
     setSceneError(false);
     if (!s || !runtime || !game.reader || s.round.placedBricks === 0n) return;
     const first = s.brickCount - s.round.placedBricks + 1n;
-    const count = Number(
-      s.round.placedBricks > 204n ? 204n : s.round.placedBricks,
-    );
     Promise.all(
-      Array.from({ length: count }, (_, i) =>
+      sceneBrickIndices(s.round.placedBricks).map((i) =>
         read<Brick>(
           game.reader!,
           runtime.game,
           runtime.abis.Ponziramid,
           "bricks",
-          [first + BigInt(i)],
+          [first + i],
           s.block,
         ),
       ),
@@ -79,9 +77,7 @@ function Game() {
         if (active)
           setWithdrawn(
             new Set(
-              bricks
-                .filter((b) => b.withdrawn)
-                .map((b) => Number(b.indexInRound)),
+              bricks.filter((b) => b.withdrawn).map((b) => b.indexInRound),
             ),
           );
       })
@@ -111,6 +107,7 @@ function Game() {
             reader: game.reader,
             provider: wallet.provider,
             account: wallet.account,
+            chainId: wallet.chainId,
             ready:
               !!wallet.account &&
               correctChain &&
@@ -128,6 +125,7 @@ function Game() {
       game.reader,
       wallet.provider,
       wallet.account,
+      wallet.chainId,
       correctChain,
       game.verified,
       s,
@@ -302,12 +300,17 @@ function Game() {
             <dl className="stats two arena-stats">
               <Stat
                 label={s?.round.finalized ? "Tomb allocated" : "ETH Tomb"}
-                value={shortAmount(s?.round.tomb)}
-                unit="ETH"
+                value={
+                  <span className={s ? "tomb-overview" : undefined}>
+                    {shortAmount(s?.round.tomb)}{" "}
+                    <span className="unit">ETH</span>
+                  </span>
+                }
                 detail={
                   s && (
-                    <span title={amount(s.round.tomb)}>
-                      Exact: {amount(s.round.tomb)} ETH
+                    <span className="tomb-exact" title={amount(s.round.tomb)}>
+                      <span className="exact-label">Exact: </span>
+                      {amount(s.round.tomb)} ETH
                     </span>
                   )
                 }

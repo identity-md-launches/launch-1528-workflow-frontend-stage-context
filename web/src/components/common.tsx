@@ -82,6 +82,7 @@ export interface ActionContext {
   reader: Reader;
   provider?: Provider;
   account?: Address;
+  chainId?: number;
   ready: boolean;
   busy: string;
   setBusy: (name: string) => void;
@@ -91,6 +92,7 @@ export interface ActionContext {
     label: string,
     stage: string,
     hash: Hex,
+    replaces?: Hex,
   ) => void;
 }
 export function TxAction({
@@ -102,6 +104,7 @@ export function TxAction({
   onConfirmed,
   primary = false,
   hint,
+  validate,
 }: {
   ctx: ActionContext;
   id: string;
@@ -111,6 +114,7 @@ export function TxAction({
   onConfirmed?: () => void;
   primary?: boolean;
   hint?: string;
+  validate?: () => void;
 }) {
   const [stage, setStage] = useState(""),
     [hash, setHash] = useState<Hex>(),
@@ -137,23 +141,24 @@ export function TxAction({
     let submitted: Hex | undefined;
     try {
       const tx = await getTransaction();
-      await transact(
+      const result = await transact(
         ctx.reader,
         ctx.runtime,
         ctx.provider,
         ctx.account,
         tx,
-        (s, h) => {
+        (s, h, replaces) => {
           setStage(s);
           if (h) {
             submitted = h;
             setHash(h);
-            ctx.recordTransaction(id, label, s, h);
+            ctx.recordTransaction(id, label, s, h, replaces);
           }
         },
+        validate,
       );
       await ctx.refresh();
-      onConfirmed?.();
+      if (result.outcome === "Confirmed") onConfirmed?.();
     } catch (e) {
       setError(errorText(e));
       setStage("");
@@ -219,6 +224,15 @@ export function TxAction({
       <div className="action-status" role="status">
         {!running && stage === "Confirmed" && (
           <span className="success">Transaction confirmed. </span>
+        )}
+        {!running && (stage === "Cancelled" || stage === "Replaced") && (
+          <span>
+            {stage === "Replaced"
+              ? `${label}: replaced by a different transaction. Review its receipt; the requested action was not confirmed. `
+              : id === "build"
+                ? "Build cancelled. No brick was placed. "
+                : `${label}: cancelled. The requested action was not completed. `}
+          </span>
         )}
         {hash && (
           <a

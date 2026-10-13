@@ -1,19 +1,20 @@
 {
-  "kind": "Pinned taste@1 probe on final export",
+  "kind": "Pinned taste@1 probe on final revision export",
+  "at": "2026-10-13T08:36:54.323Z",
   "scriptSha256": "1fd399551eb1805e46ad4d736d26a0428228251144698149c30e5e2047057173",
   "checks": [
     {
       "name": "render",
       "passed": true,
       "exitCode": 0,
-      "durationMs": 17805,
+      "durationMs": 15164,
       "output": "renders, no script errors or missing local files\nexternal hosts: ethereum-rpc.publicnode.com"
     },
     {
       "name": "layout",
       "passed": true,
       "exitCode": 0,
-      "durationMs": 0,
+      "durationMs": 1,
       "output": "no horizontal scroll at 320, 390 or 1440\nno text box overlaps another\nno floating control covers text\nno text cut off by overflow: hidden"
     },
     {
@@ -34,7 +35,7 @@
       "name": "casing",
       "passed": false,
       "exitCode": 1,
-      "durationMs": 1,
+      "durationMs": 0,
       "output": "1 all-caps text boxes in content:\n1440px: #funding > div.funding-state:nth-of-type(2) \"NOT FUNDED\""
     },
     {
@@ -48,21 +49,21 @@
       "name": "eyebrows",
       "passed": true,
       "exitCode": 0,
-      "durationMs": 2,
+      "durationMs": 1,
       "output": "no kicker labels above headings"
     },
     {
       "name": "type-sizes",
       "passed": true,
       "exitCode": 0,
-      "durationMs": 1,
-      "output": "390: 3 sizes in use, 5 with one-offs (14px\u00d768, 16px\u00d716, 20px\u00d715, 24px\u00d71, 36px\u00d71)\n1440: 4 sizes in use, 6 with one-offs (14px\u00d772, 16px\u00d716, 20px\u00d73, 24px\u00d714, 36px\u00d71, 48px\u00d71)\nbar: 6 sizes used more than once, 8 counting one-offs, per width"
+      "durationMs": 0,
+      "output": "390: 3 sizes in use, 5 with one-offs (14px\u00d768, 16px\u00d716, 20px\u00d714, 24px\u00d71, 36px\u00d71)\n1440: 4 sizes in use, 6 with one-offs (14px\u00d773, 16px\u00d716, 20px\u00d73, 24px\u00d714, 36px\u00d71, 48px\u00d71)\nbar: 6 sizes used more than once, 8 counting one-offs, per width"
     },
     {
       "name": "type-faces",
       "passed": true,
       "exitCode": 0,
-      "durationMs": 1,
+      "durationMs": 0,
       "output": "families (2): avenir next, georgia\nweights (3): 400, 600, 700"
     },
     {
@@ -76,21 +77,21 @@
       "name": "slogans",
       "passed": true,
       "exitCode": 0,
-      "durationMs": 1,
+      "durationMs": 0,
       "output": "2 two-beat lines; a stack is four or more, so keep the best and cut the rest:\n\"Permanent rewards. Public balances. Verify every deposit.\" (#funding > p.muted:nth-of-type(1))\n\"Stone never pays prizes. Only Mortar does.\" (#rules > div.trust-line:nth-of-type(2))"
     },
     {
       "name": "repetition",
       "passed": true,
       "exitCode": 0,
-      "durationMs": 2,
+      "durationMs": 1,
       "output": "no repeated lines"
     },
     {
       "name": "copy-budget",
       "passed": true,
       "exitCode": 0,
-      "durationMs": 0,
+      "durationMs": 1,
       "output": "prose on the first screen: 50 words at 390 (bar 60), 56 at 1440 (bar 90)\nall words on the first screen: 108 at 390, 127 at 1440\nwhole page: 445 words, 248 of them prose"
     },
     {
@@ -120,5 +121,5 @@
     "text": "NOT FUNDED",
     "reason": "The approved workflow explicitly requires this exact label."
   },
-  "exportManifestSha256": "72da8315ba3a6feb2a3091132a18b417bed3bb83def828d20cb5d014d6e3d311"
+  "exportManifestSha256": "3edd014e27fb3147b99049ec2e1756a01bf8d09014bf73dfd248d197cb1a9a51"
 }

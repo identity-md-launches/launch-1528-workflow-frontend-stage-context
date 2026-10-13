@@ -1,0 +1,200 @@
+{
+  "kind": "Worker-run mocked Chromium regressions; no broadcasts",
+  "at": "2026-10-13T08:37:25.207Z",
+  "results": [
+    {
+      "name": "Pyramid grows at 204→205, course/LOD/page boundaries and huge counts; reads/rendering bounded",
+      "passed": true,
+      "durationMs": 12218,
+      "states": [
+        {
+          "count": "204",
+          "detailCount": 204,
+          "svgHash": "b4bd6170f1122f951afaa6c5209395376d8e0334798ba5aea62f392f1f1be30d",
+          "brickStatusCalls": 204
+        },
+        {
+          "count": "205",
+          "detailCount": 205,
+          "svgHash": "0d2a1eedf04da2535274e62026552fd7e3b500f0bc03a5b94eba176cbfbf3116",
+          "brickStatusCalls": 205
+        },
+        {
+          "count": "285",
+          "detailCount": 285,
+          "svgHash": "381536641da8f72ec2ac72155eb0436d5e3744be3edf5e03a3c51edaa80c2608",
+          "brickStatusCalls": 285
+        },
+        {
+          "count": "286",
+          "detailCount": 286,
+          "svgHash": "46dd93da723e5cb50795938c8d479c8cee2c297d04e13562ce07a7878dabffa5",
+          "brickStatusCalls": 286
+        },
+        {
+          "count": "650",
+          "detailCount": 650,
+          "svgHash": "f140f0a2e308c99981aa70663a6b0f41f6cf979068b1f7817111446cec12e908",
+          "brickStatusCalls": 650
+        },
+        {
+          "count": "651",
+          "detailCount": 11,
+          "svgHash": "0c2d030e50604e4bcaab1c0e551b3af9293460045450f3af0779d7df7758abf6",
+          "brickStatusCalls": 11
+        },
+        {
+          "count": "703",
+          "detailCount": 63,
+          "svgHash": "4f9006c3f9dab6c1a084f53b30da4c4aaf7c22f27c2549735246e7ea21edfcf6",
+          "brickStatusCalls": 63
+        },
+        {
+          "count": "704",
+          "detailCount": 64,
+          "svgHash": "4e5eb4be7fb055dd742cdd66164769c8bf3e2b5f6547897e2f3d5ecc11cfeea8",
+          "brickStatusCalls": 64
+        },
+        {
+          "count": "705",
+          "detailCount": 1,
+          "svgHash": "bf9ec9e02f7948f737c9576f215cd373eb2ddcfdb0bf0be2c15b12860c30fc8c",
+          "brickStatusCalls": 1
+        },
+        {
+          "count": "41600",
+          "detailCount": 64,
+          "svgHash": "6123ee83e3aa049ce0c26f623a3b858be5a78088ce892cffe80b22dee2c899e1",
+          "brickStatusCalls": 64
+        },
+        {
+          "count": "41601",
+          "detailCount": 1,
+          "svgHash": "787c032e5a0ecdf0e072a3d64a556f935be12ff2f3b5964e797d66a7c00eb173",
+          "brickStatusCalls": 1
+        },
+        {
+          "count": "1000000000000000000000000000000",
+          "detailCount": 64,
+          "svgHash": "ab3fefd907679f1d79878a022cc0aaacca551c0efe788cb2b8810bdba191f7a7",
+          "brickStatusCalls": 64
+        },
+        {
+          "count": "1000000000000000000000000000001",
+          "detailCount": 1,
+          "svgHash": "21cf7ac625850e532aef7daaf7029cf6a9291464ad97ba17df700502bcb638df",
+          "brickStatusCalls": 1
+        }
+      ]
+    },
+    {
+      "name": "Pending quote discarded after direction+amount+slippage changes",
+      "passed": true,
+      "durationMs": 2764
+    },
+    {
+      "name": "Pending quote discarded after amount changes",
+      "passed": true,
+      "durationMs": 2243
+    },
+    {
+      "name": "Pending quote discarded after slippage changes",
+      "passed": true,
+      "durationMs": 2277
+    },
+    {
+      "name": "Pending quote discarded after account changes",
+      "passed": true,
+      "durationMs": 2238
+    },
+    {
+      "name": "Pending quote discarded after chain changes",
+      "passed": true,
+      "durationMs": 2313
+    },
+    {
+      "name": "Pending quote discarded after change-and-restore changes",
+      "passed": true,
+      "durationMs": 2255
+    },
+    {
+      "name": "A late allowance response cannot enable the previous approval under a new quote",
+      "passed": true,
+      "durationMs": 2883
+    },
+    {
+      "name": "Mined replacement: cancelled has truthful status and a single settled history entry",
+      "passed": true,
+      "durationMs": 2294
+    },
+    {
+      "name": "Mined replacement: different destination has truthful status and a single settled history entry",
+      "passed": true,
+      "durationMs": 2255
+    },
+    {
+      "name": "Mined replacement: different calldata has truthful status and a single settled history entry",
+      "passed": true,
+      "durationMs": 2198
+    },
+    {
+      "name": "Mined replacement: different value has truthful status and a single settled history entry",
+      "passed": true,
+      "durationMs": 2268
+    },
+    {
+      "name": "Mined replacement: repriced has truthful status and a single settled history entry",
+      "passed": true,
+      "durationMs": 2204
+    },
+    {
+      "name": "Cancelled swap skips its success callback and remains available for review",
+      "passed": true,
+      "durationMs": 2894
+    },
+    {
+      "name": "Full Tomb value is visible, selectable and wrapped at 320/390/1440; Build stays on mobile first screen",
+      "passed": true,
+      "durationMs": 2150,
+      "boxes": [
+        {
+          "width": 320,
+          "action": {
+            "x": 27,
+            "y": 772.96875,
+            "width": 266,
+            "height": 48
+          }
+        },
+        {
+          "width": 390,
+          "action": {
+            "x": 33,
+            "y": 742.96875,
+            "width": 324,
+            "height": 48
+          }
+        },
+        {
+          "width": 1440,
+          "action": {
+            "x": 814.546875,
+            "y": 693.875,
+            "width": 476.453125,
+            "height": 50
+          }
+        },
+        {
+          "width": 390,
+          "state": "651 bricks and full Tomb",
+          "action": {
+            "x": 33,
+            "y": 88.15625,
+            "width": 324,
+            "height": 48
+          }
+        }
+      ]
+    }
+  ]
+}

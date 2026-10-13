@@ -33,7 +33,7 @@ The SVG uses limestone face colors `#ead1a5`, `#c49860`, `#966842` and subdued w
 
 The UI requests `Avenir Next, Avenir, Segoe UI, sans-serif`; the headline requests `Georgia, Times New Roman, serif`. These are system stacks, with no external font requests, downloads or claims that a particular device font is installed. Weights are 400, 600 and 700. The main headline is the heaviest text.
 
-Six token sizes are used: small 14px, body 16px, subheading 20px, statistic 24px, heading/timer 36px, desktop display 48px. The main headline becomes 36px below 1100px. Mobile input text stays 16px. Body line-height is 1.5; headings are 1.2, and multiline rule text is 1.65. Headline tracking is −0.045em; ordinary prose has natural spacing. Numbers use tabular figures. Critical amounts and addresses wrap with `overflow-wrap`, rather than ellipsis or clipping; a rounded Tomb overview has an exact value alongside it on desktop and contract-level reads remain available.
+Six token sizes are used: small 14px, body 16px, subheading 20px, statistic 24px, heading/timer 36px, desktop display 48px. The main headline becomes 36px below 1100px. Mobile input text stays 16px. Body line-height is 1.5; headings are 1.2, and multiline rule text is 1.65. Headline tracking is −0.045em; ordinary prose has natural spacing. Numbers use tabular figures. Critical amounts and addresses wrap with `overflow-wrap`, rather than ellipsis or clipping. The desktop Tomb has an abbreviated overview alongside the exact value. Mobile suppresses that duplicate overview and keeps the exact, selectable amount in the existing stat space.
 
 `NOT FUNDED` is deliberately uppercase because the approved brief requires that exact visible label. It is the recorded exception to the probe’s content-casing rule, not a reusable heading style.
 
@@ -51,7 +51,7 @@ UI surfaces are flat tonal layers. Structural borders divide the arena, forms an
 
 ## Shapes
 
-The arena and content panels use 12px radii, controls/inputs 6px and transaction history 8px. The pyramid is built from square isometric courses, with stable indices when a brick’s Stone is withdrawn. Only the first 204 slots are drawn; the complete round count remains live. The viewport bound is disclosed and does not limit the contract or historical refund access.
+The arena and content panels use 12px radii, controls/inputs 6px and transaction history 8px. The pyramid is built from square isometric courses, with stable indices when a brick’s Stone is withdrawn. The count determines the bottom-up courses: the minimum base grows from eight to twelve bricks per side as needed (including 204 → 205). At more than 650 bricks the scene groups the overview in powers of 64 and enlarges the current page of up to 64 recent individual bricks. The visible caption and accessible image description state the group size and exact detail range, on mobile as well as desktop. Course positions reflow when the base or overview scale changes. SVG work stays within 650 overview slots plus 64 detail slots; per-brick withdrawal reads cover the individual bricks currently shown. These display bounds do not limit the contract or historical refund access.
 
 ## Components
 
@@ -60,11 +60,11 @@ The arena and content panels use 12px radii, controls/inputs 6px and transaction
 | `components/ui/button.tsx` | shadcn-style Radix Slot/CVA button; default orange, outline and ghost variants; native disabled state; 46px standard target; keyboard focus; 150ms color/press feedback |
 | `components/common.tsx:AddressView` | Full checksummed, wrapping address; explorer link, copy button and copy-failure guidance |
 | `components/common.tsx:Stat` | Semantic `dt`/`dd` pair with optional unit and descriptive detail inside the definition |
-| `components/common.tsx:TxAction` | Per-action simulation/signing/receipt state; locks, rejection/revert handling, receipt-only retry after unknown confirmation, explorer link |
-| `components/Pyramid.tsx` | Confirmed isometric slots; dark withdrawn faces; animated crown and accessible pause control; reduced-motion support |
+| `components/common.tsx:TxAction` | Per-action simulation/signing/receipt state; locks, rejection/revert handling, cancellation/different-replacement outcomes, receipt-only retry after unknown confirmation, explorer link |
+| `components/Pyramid.tsx` | Count-derived isometric courses, bounded large-round overview/recent-brick detail; dark withdrawn individual faces; animated crown, pause control and reduced-motion support |
 | `components/WalletPanel.tsx` | Principal/credited ETH, paginated brick discovery, direct historical lookup, refund/claim controls and validated alternate recipient |
 | `components/FundingPanel.tsx` | Public balances, initial funding gate, creator receipt identity, permanent funding disclosure and separate approval/deposit steps |
-| `components/SwapPanel.tsx` | Native direction controls, labeled amount/slippage inputs, quote, minimum receive, rate and sequential approval/swap control |
+| `components/SwapPanel.tsx` | Native direction controls, labeled amount/slippage inputs, request-scoped quotes and allowance steps, minimum receive, rate and sequential approval/swap control |
 | Native `details`/`summary` | Optional explanations and owner/funding forms; platform keyboard behavior without custom focus traps |
 
 Page-level state is in `App.tsx`; wallet/polling lifecycle is in `hooks.ts`. `chain.ts` owns verified reads and transaction prerequisites. App transaction history preserves receipt links when a completed action’s panel changes. Shared controls use native labels and persistent `role=alert`/`role=status` text. The timer is a timer role with announcements off, so it does not interrupt a screen reader every second.

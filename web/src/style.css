@@ -941,6 +941,30 @@ footer a {
   .scene-caption {
     display: none;
   }
+  .grouped-scene.pyramid-scene {
+    height: auto;
+    min-height: 0;
+    padding-top: 96px;
+  }
+  .grouped-scene .scene-heading {
+    position: absolute;
+  }
+  .grouped-scene .scene-heading > span {
+    max-width: 38%;
+    overflow-wrap: anywhere;
+  }
+  .grouped-scene .pyramid {
+    height: 106px;
+  }
+  .grouped-scene .scene-crown {
+    inset-block-start: 4px;
+  }
+  .scene-caption.representation-limit {
+    display: block;
+    padding: 0 16px 8px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
   .pharaoh-line {
     padding: 8px 16px;
     border-top: 0;
@@ -983,6 +1007,15 @@ footer a {
     font-size: var(--font-subheading);
   }
   .arena-stats .stat-detail {
+    display: none;
+  }
+  .arena-stats .stat:first-child .stat-detail {
+    display: block;
+    margin-top: 0;
+    color: var(--text);
+  }
+  .tomb-overview,
+  .tomb-exact .exact-label {
     display: none;
   }
   .build-terms {

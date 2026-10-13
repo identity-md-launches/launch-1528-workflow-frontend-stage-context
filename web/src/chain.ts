@@ -422,8 +422,10 @@ export async function transact(
   p: Provider,
   account: Address,
   tx: Transaction,
-  onStatus: (stage: string, hash?: Hex) => void,
+  onStatus: (stage: string, hash?: Hex, replaces?: Hex) => void,
+  validate?: () => void,
 ) {
+  validate?.();
   if (
     Number(await p.request({ method: "eth_chainId" })) !== c.deployment.chainId
   )
@@ -433,33 +435,53 @@ export async function transact(
     throw Error("Wallet changed. Review the action again.");
   onStatus("Simulating");
   await r.simulateContract({ ...tx, args: tx.args || [], account });
+  validate?.();
   const wallet = createWalletClient({ chain: r.chain, transport: custom(p) });
+  const data = encodeFunctionData({
+    abi: tx.abi,
+    functionName: tx.functionName,
+    args: tx.args || [],
+  });
   onStatus("Confirm in wallet");
   const hash = await wallet.sendTransaction({
     account,
     chain: r.chain,
     to: tx.address,
-    data: encodeFunctionData({
-      abi: tx.abi,
-      functionName: tx.functionName,
-      args: tx.args || [],
-    }),
+    data,
     value: tx.value || 0n,
   });
   onStatus("Waiting for confirmation", hash);
+  let outcome: "Confirmed" | "Cancelled" | "Replaced" = "Confirmed";
   const receipt = await r.waitForTransactionReceipt({
     hash,
     confirmations: 1,
     timeout: 180_000,
-    onReplaced: ({ transaction }) =>
-      onStatus("Replacement pending", transaction.hash),
+    onReplaced: ({ reason, transaction, replacedTransaction }) => {
+      // A mined cancellation/different call does not establish action success.
+      // Compare with the requested payload as well as viem's replacement reason.
+      const matches =
+        same(transaction.to ?? undefined, tx.address) &&
+        transaction.input.toLowerCase() === data.toLowerCase() &&
+        transaction.value === (tx.value || 0n);
+      outcome =
+        matches && reason !== "cancelled"
+          ? "Confirmed"
+          : reason === "cancelled"
+            ? "Cancelled"
+            : "Replaced";
+      onStatus("Replacement mined", transaction.hash, replacedTransaction.hash);
+    },
   });
+  if (outcome !== "Confirmed") {
+    onStatus(outcome, receipt.transactionHash);
+    return { receipt, outcome };
+  }
   if (receipt.status !== "success")
     throw Error(
       "Transaction reverted. No action was completed. Refresh before retrying.",
     );
   onStatus("Confirmed", receipt.transactionHash);
-  return receipt;
+  return { receipt, outcome };
 }
 export function recipientAddress(
   value: string,

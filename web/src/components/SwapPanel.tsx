@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDownUp, ExternalLink } from "lucide-react";
 import { zeroAddress } from "viem";
 import { Button } from "./ui/button";
@@ -16,13 +16,36 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
   const [buy, setBuy] = useState(true),
     [input, setInput] = useState(""),
     [bps, setBps] = useState("50"),
-    [quote, setQuote] = useState<Quote>(),
+    [quoted, setQuoted] = useState<{
+      value: Quote;
+      scope: object;
+      request: number;
+    }>(),
     [step, setStep] = useState<Awaited<ReturnType<typeof nextSwapStep>>>(),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(false),
     [pairMeta, setPairMeta] = useState<{ symbol: string; decimals: number }>(),
     [clock, setClock] = useState(Date.now()),
     [completed, setCompleted] = useState(false);
+  const scope = useMemo(
+    () => ({}),
+    [
+      buy,
+      input,
+      bps,
+      ctx.account,
+      ctx.chainId,
+      ctx.provider,
+      ctx.reader,
+      ctx.runtime,
+    ],
+  );
+  const currentScope = useRef(scope);
+  currentScope.current = scope;
+  const generation = useRef(0);
+  const quote = quoted?.scope === scope ? quoted.value : undefined;
+  const isCurrent = (request: number) =>
+    currentScope.current === scope && generation.current === request;
   useEffect(() => {
     const t = setInterval(() => setClock(Date.now()), 1000);
     return () => clearInterval(t);
@@ -50,29 +73,42 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
     };
   }, [ctx.runtime, ctx.reader]);
   useEffect(() => {
-    setQuote(undefined);
+    generation.current++;
+    setQuoted(undefined);
     setStep(undefined);
     setError("");
     setCompleted(false);
-  }, [buy, input, bps, ctx.account]);
-  const updateStep = async (q: Quote) => {
+    setLoading(false);
+    return () => {
+      generation.current++;
+    };
+  }, [scope]);
+  const updateStep = async (q: Quote, request: number) => {
     if (ctx.account) {
       try {
-        setStep(await nextSwapStep(ctx.reader, ctx.runtime, q, ctx.account));
+        const next = await nextSwapStep(
+          ctx.reader,
+          ctx.runtime,
+          q,
+          ctx.account,
+        );
+        if (isCurrent(request)) setStep(next);
       } catch (e) {
-        setStep(undefined);
-        setError(errorText(e));
+        if (isCurrent(request)) {
+          setStep(undefined);
+          setError(errorText(e));
+        }
       }
     }
   };
   const getQuote = async () => {
     if (!s || !pairMeta) return;
+    const request = ++generation.current;
     setLoading(true);
     setCompleted(false);
-    setQuote(undefined);
+    setQuoted(undefined);
     setStep(undefined);
     setError("");
-    setCompleted(false);
     try {
       const n = parseAmount(input, buy ? pairMeta.decimals : s.decimals);
       const q = await quoteTrade(
@@ -83,12 +119,13 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
         Number(bps),
         ctx.account,
       );
-      setQuote(q);
-      await updateStep(q);
+      if (!isCurrent(request)) return;
+      setQuoted({ value: q, scope, request });
+      await updateStep(q, request);
     } catch (e) {
-      setError(errorText(e));
+      if (isCurrent(request)) setError(errorText(e));
     } finally {
-      setLoading(false);
+      if (isCurrent(request)) setLoading(false);
     }
   };
   const expired = !!quote && clock - quote.created > 60_000;
@@ -102,10 +139,18 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
         The attested Uniswap v4 pool. Trading is separate from the game.
       </p>
       <div className="segmented" role="group" aria-label="Trade direction">
-        <Button aria-pressed={buy} onClick={() => setBuy(true)}>
+        <Button
+          disabled={ctx.busy === "swap"}
+          aria-pressed={buy}
+          onClick={() => setBuy(true)}
+        >
           Buy {s?.symbol || "token"}
         </Button>
-        <Button aria-pressed={!buy} onClick={() => setBuy(false)}>
+        <Button
+          disabled={ctx.busy === "swap"}
+          aria-pressed={!buy}
+          onClick={() => setBuy(false)}
+        >
           Sell {s?.symbol || "token"}
         </Button>
       </div>
@@ -115,6 +160,7 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
       </label>
       <input
         id="swap-amount"
+        disabled={ctx.busy === "swap"}
         inputMode="decimal"
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -123,6 +169,7 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
       <label htmlFor="slippage">Maximum slippage</label>
       <select
         id="slippage"
+        disabled={ctx.busy === "swap"}
         value={bps}
         onChange={(e) => setBps(e.target.value)}
       >
@@ -190,6 +237,16 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
               id="swap"
               label={step.label}
               disabled={expired || completed}
+              validate={() => {
+                if (
+                  !quoted ||
+                  !isCurrent(quoted.request) ||
+                  Date.now() - quote.created > 60_000
+                )
+                  throw Error(
+                    "Trade changed or quote expired. Get a new quote before signing.",
+                  );
+              }}
               getTransaction={async () => {
                 const fresh = await nextSwapStep(
                   ctx.reader,
@@ -197,16 +254,21 @@ export function SwapPanel({ ctx, s }: { ctx: ActionContext; s?: Snapshot }) {
                   quote,
                   ctx.account!,
                 );
-                if (fresh.label !== step.label)
+                if (
+                  !quoted ||
+                  !isCurrent(quoted.request) ||
+                  fresh.label !== step.label
+                )
                   throw Error(
                     "Approval status changed. Get a new quote to review the next step.",
                   );
                 return fresh.tx;
               }}
               onConfirmed={() => {
+                if (!quoted || !isCurrent(quoted.request)) return;
                 if (step.final) {
                   setCompleted(true);
-                } else void updateStep(quote);
+                } else void updateStep(quote, quoted.request);
               }}
               hint={
                 step.final

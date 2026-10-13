@@ -11,6 +11,7 @@
     "verify": "node scripts/export-manifest.mjs --check",
     "test": "tsx --test tests/core.test.ts",
     "test:browser": "node tests/browser.mjs",
+    "test:revision": "node tests/revision.mjs",
     "test:live": "node tests/live-read.mjs",
     "format": "prettier --write src scripts tests vite.config.ts"
   },
